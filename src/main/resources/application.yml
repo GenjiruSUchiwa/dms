@@ -1,0 +1,9 @@
+server:
+  port: 5000
+spring:
+  cloud:
+    gcp:
+      project-id: deskvantage-fb75f
+      firestore:
+        credentials:
+          location: classpath:deskvantage.json

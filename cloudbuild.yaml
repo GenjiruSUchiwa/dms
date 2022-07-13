@@ -1,0 +1,20 @@
+steps:
+# Build the container image for api
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us.gcr.io/ct-admin-project/capitaltyping/dms-api:$COMMIT_SHA', '.']
+# Push the image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us.gcr.io/ct-admin-project/capitaltyping/dms-api:$COMMIT_SHA']
+# Deploy image to GKE platform
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+  - '--namespace=staging'
+  - 'set'
+  - 'image'
+  - 'deployment/dms-api'
+  - 'dms-api=us.gcr.io/ct-admin-project/capitaltyping/dms-api:$COMMIT_SHA'
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-east1-c'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=capitaltyping'
+images:
+  - us.gcr.io/ct-admin-project/capitaltyping/dms-api
